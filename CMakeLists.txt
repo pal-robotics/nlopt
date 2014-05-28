@@ -16,16 +16,15 @@ catkin_package(
     LIBRARIES nlopt_wrap
 )
 
-set(NLOPT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/nlopt_install)
+set(NLOPT_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/nlopt_install)
 set(NLOPT_INSTALL_DIR ${NLOPT_INSTALL_PREFIX}/${CMAKE_INSTALL_PREFIX})
-configure_file(make_install_nlopt.sh.in ${CMAKE_BINARY_DIR}/make_install_nlopt.sh)
+configure_file(make_install_nlopt.sh.in ${CMAKE_CURRENT_BINARY_DIR}/make_install_nlopt.sh)
 
 ExternalProject_Add(nlopt_src
-  DOWNLOAD_COMMAND wget http://ab-initio.mit.edu/nlopt/nlopt-${VERSION}.tar.gz
-  PATCH_COMMAND tar -xzf ../nlopt-${VERSION}.tar.gz && rm -rf ../nlopt_src-build/nlopt-${VERSION} && mv nlopt-${VERSION} ../nlopt_src-build/
-  CONFIGURE_COMMAND nlopt-${VERSION}/configure --with-cxx --without-matlab --with-pic --prefix=${CMAKE_INSTALL_PREFIX}
+  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/nlopt-${VERSION}
+  CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/nlopt-${VERSION}/configure --with-cxx --without-matlab --with-pic --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND make
-  INSTALL_COMMAND ${CMAKE_BINARY_DIR}/make_install_nlopt.sh
+  INSTALL_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/make_install_nlopt.sh
 )
 
 add_library(nlopt_wrap src/wrap_lib.cc)
